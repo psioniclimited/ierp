@@ -23,13 +23,13 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <link rel="stylesheet" href="plugins/tooltipster/css/tooltipster.bundle.min.css">
-        
+        <link rel="stylesheet" href="plugins/tooltipster/tooltipster.css">
+
     </head>
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="../../index2.html"><b> i </b>ERP</a>
+                <a href="{{ url('/') }}"><b> i </b>ERP</a>
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
@@ -49,7 +49,7 @@
                 <div class="form-group has-feedback">
                     <input type="email" class="form-control" placeholder="Email" name="username" id="username">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
+                </div><br>
                 <div class="form-group has-feedback">
                     <input type="password" class="form-control" placeholder="Password" name="password" id="password">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
@@ -67,14 +67,9 @@
                         <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                     </div>
                     <!-- /.col -->
-                    
-                    
 
-                    
                 </div>
                 {!! Form::close() !!}
-                
-                
 
             </div>
             <!-- /.login-box-body -->
@@ -88,12 +83,9 @@
         <!-- iCheck -->
         <script src="plugins/iCheck/icheck.min.js"></script>
         <script src="plugins/validation/dist/jquery.validate.min.js"></script>
-        <script src="plugins/tooltipster/js/tooltipster.bundle.js"></script>
-        
-        
-        
-        
-        
+        <script src="plugins/tooltipster/tooltipster.js"></script>
+
+
         <script>
             $(function () {
                 $('input').iCheck({
@@ -103,30 +95,51 @@
                 });
             });
 
-
             $(document).ready(function () {
-                
-                $('.tooltip').tooltipster();
 
-                //* validation
-                $('#login_form').validate({
-                    onkeyup: false,
-                    errorClass: 'error',
-                    validClass: 'valid',
-                    rules: {
-                        username: {required: true, minlength: 3},
-                        password: {required: true, minlength: 3}
-                    },
-                    highlight: function (element) {
-                        $(element).closest('div').addClass("f_error");
-                    },
-                    unhighlight: function (element) {
-                        $(element).closest('div').removeClass("f_error");
-                    },
-                    errorPlacement: function (error, element) {
-                        $(element).closest('div').append(error);
-                    }
+                // initialize tooltipster on form input elements
+                $('form input').tooltipster({// <-  USE THE PROPER SELECTOR FOR YOUR INPUTs
+                    trigger: 'custom', // default is 'hover' which is no good here
+                    onlyOne: false, // allow multiple tips to be open at a time
+                    position: 'right'  // display the tips to the right of the element
                 });
+
+                // initialize validate plugin on the form
+                $('#login_form').validate({
+                    errorPlacement: function (error, element) {
+
+                        var lastError = $(element).data('lastError'),
+                                newError = $(error).text();
+
+                        $(element).data('lastError', newError);
+
+                        if (newError !== '' && newError !== lastError) {
+                            $(element).tooltipster('content', newError);
+                            $(element).tooltipster('show');
+                        }
+                    },
+                    success: function (label, element) {
+                        $(element).tooltipster('hide');
+                    },
+                    rules: {
+                        username: {
+                            required: true, email: true
+                        },
+                        password: {
+                            required: true, minlength: 6
+                        }
+                    },
+                    messages: {
+                        username: {
+                            required: "Please provide username."
+                        },
+                        password: {
+                            required: "Please provide password"
+                        }
+                    },
+                    
+                });
+
             });
         </script>
     </body>

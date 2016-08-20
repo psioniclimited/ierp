@@ -1,12 +1,19 @@
 @extends('master')
 
 @section('css')
+<!-- DataTables -->
+<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet" href="plugins/tooltipster/tooltipster.css">
 @endsection
 
 @section('scripts')
-<script src="plugins/validation/dist/jquery.validate.js"></script>
+<!-- DataTables -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+
+<script src="plugins/validation/dist/jquery.validate.min.js"></script>
 <script src="plugins/tooltipster/tooltipster.js"></script>
+
 <script>
     $(document).ready(function () {
 
@@ -14,11 +21,11 @@
         $('form input').tooltipster({// <-  USE THE PROPER SELECTOR FOR YOUR INPUTs
             trigger: 'custom', // default is 'hover' which is no good here
             onlyOne: false, // allow multiple tips to be open at a time
-            position: 'right'  // display the tips to the right of the element
+            position: 'left'  // display the tips to the right of the element
         });
 
         // initialize validate plugin on the form
-        $('#add_user_form').validate({
+        $('#permissions_form').validate({
             errorPlacement: function (error, element) {
 
                 var lastError = $(element).data('lastError'),
@@ -35,34 +42,55 @@
                 $(element).tooltipster('hide');
             },
             rules: {
-                fullname: {required: true, minlength: 4},
-                uemail: {required: true, email: true},
-                upassword: {required: true, minlength: 6},
-                upassword_re: {required: true, equalTo: "#upassword"}
+                pname: {required: true, minlength: 3},
+                dname: {required: true, minlength: 3}
             },
             messages: {
-                fullname: {required: "Please give fullname"},
-                uemail: {required: "Insert email address"},
-                upassword: {required: "Six digit password"},
-                upassword_re: {required: "Re-enter same password"}
+                pname: {required: "Enter permission name"},
+                dname: {required: "Insert display name"}
             }
         });
     });
 
+ 
+
 </script>
 
+<script>
+    $(document).ready(function () {        
+        $('#permissions_list').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "processing": true,
+            "serverSide": true,
+            "ajax": "{{URL::to('/getpermissions')}}",
+            "columns": [
+                    {"data": "id"},
+                    {"data": "name"},
+                    {"data": "display_name"},                    
+                    {"data": "description"},                    
+                    {"data": "Link", name: 'link', orderable: false, searchable: false}
+                ],
+            "order": [[1, 'asc']]
+        });
+    });
+</script>
 
 @endsection
 
 @section('side_menu')
 <ul class="sidebar-menu">
     <li class="header">MAIN NAVIGATION</li>
-    <li>
+    <li class="active">
         <a href="dashboard">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>            
         </a>        
     </li>
-    <li class="treeview active">
+    <li class="treeview">
         <a href="#">
             <i class="fa fa-files-o"></i>
             <span>Users</span>
@@ -72,30 +100,32 @@
         </a>
         <ul class="treeview-menu">
             <li><a href="allusers"><i class="fa fa-circle-o"></i> All User</a></li>
-            <li class="active"><a href="create_users"><i class="fa fa-circle-o"></i> New User</a></li>            
+            <li><a href="create_users"><i class="fa fa-circle-o"></i> New User</a></li>            
         </ul>
     </li>
-    <li>
-        <a href="../widgets.html">
-            <i class="fa fa-th"></i> <span>Widgets</span>
-            <span class="pull-right-container">
-                <small class="label pull-right bg-green">Hot</small>
-            </span>
-        </a>
-    </li>
+
     <li class="treeview">
         <a href="#">
-            <i class="fa fa-pie-chart"></i>
-            <span>Charts</span>
+            <i class="fa fa-gears"></i>
+            <span>Settings</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a href="../charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-            <li><a href="../charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
-            <li><a href="../charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
-            <li><a href="../charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
+            <li>
+                <a href="#"><i class="fa fa-circle-o"></i> Permissions
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="roles"><i class="fa fa-circle-o"></i> Roles</a></li>
+                    <li><a href="permissions"><i class="fa fa-circle-o"></i> Permission</a></li>
+                    <li><a href=""><i class="fa fa-circle-o"></i> User-Role</a></li>
+                    <li><a href=""><i class="fa fa-circle-o"></i> Role-Permission</a></li>
+                </ul>
+            </li>
         </ul>
     </li>
     <li class="treeview">
@@ -220,82 +250,100 @@
 @endsection
 
 @section('content')
-
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        User Module
-        <small>it all starts here</small>
+        Permissions
+        <small>all permissions assigned</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">User</a></li>
-        <li class="active">Create Users</li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Permissions</a></li>
+        <li class="active">Permission</li>
     </ol>
 </section>
 <!-- Main content -->
 <section class="content">
-    <!-- <div class="col-md-6"> -->
-    <!-- Horizontal Form -->
-    <div class="box box-info">
-        <div class="box-header with-border">
-            <h3 class="box-title">User Create Page</h3>
-        </div>
-        <!-- /.box-header -->
-        <!-- form starts here -->
-        {!! Form::open(array('url' => 'create_users_process', 'id' => 'add_user_form', 'class' => 'form-horizontal')) !!}
+    <div class="row">
+        <div class="col-xs-6">
+            <!-- Horizontal Form -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Roles</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form starts here -->
 
-        <div class="box-body">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="fullname" class="col-sm-4 control-label">Fullname*</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter fullname">
+                {!! Form::open(array('url' => 'permission_add_process', 'class' => 'form-horizontal', 'id' => 'permissions_form')) !!}
+                <div class="box-body">
+
+                    <div class="form-group">
+                        <label for="pname" class="col-sm-3 control-label">Name</label>
+
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="rname" name="pname"  placeholder="Enter permission name">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="dname" class="col-sm-3 control-label">Display Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="dname" name="dname" placeholder="Enter display name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="col-sm-3 control-label">Description</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="3" id="description" name="description" placeholder="Enter description..."></textarea>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="uemail" class="col-sm-4 control-label">Email*</label>
-                    <div class="col-sm-8">
-                        <input type="email" class="form-control" id="uemail" name="uemail" placeholder="Enter email">
-                    </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-info pull-right" id="submit-btn">Submit</button>
                 </div>
-                <div class="form-group">
-                    <label for="upassword" class="col-sm-4 control-label">Password*</label>
-                    <div class="col-sm-8">
-                        <input type="password" class="form-control" id="upassword" name="upassword" placeholder="Enter password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="upassword_re" class="col-sm-4 control-label">Confirm Password*</label>
-                    <div class="col-sm-8">
-                        <input type="password" class="form-control" id="upassword_re" name="upassword_re" placeholder="Enter password again">
-                    </div>
-                </div>
+                <!-- /.box-footer -->
+                {!! Form::close() !!}
+                <!-- /.form ends here -->
             </div>
-            <!-- /.col -->
+            <!-- /.box -->
         </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-            <button type="submit" class="btn btn-default">Cancel</button>
-            <button type="submit" class="btn btn-primary pull-right">Submit</button>
-        </div>
-        <!-- /.box-footer -->
-        {!! Form::close() !!}
-        <!-- /.form ends here -->
 
+        <div class="col-xs-6">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Hover Data Table</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="permissions_list" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Display Name</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
 
-        @if (count($errors) > 0)
-        <div class="alert alert-danger alert-login col-sm-4">
-            <ul class="list-unstyled">
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
         </div>
-        @endif
+        <!-- column -->
     </div>
-    <!-- /.box -->
-    <!-- </div> -->
+    <!-- row -->
+
 </section>
 <!-- /.content -->
 

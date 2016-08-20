@@ -2,13 +2,13 @@
 
 @section('css')
 <!-- DataTables -->
-<link rel="stylesheet" href="../../plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
 @endsection
 
 @section('scripts')
 <!-- DataTables -->
-<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 
 <script>
     $(document).ready(function () {        
@@ -205,13 +205,13 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Data Tables
-        <small>advanced tables</small>
+        Users
+        <small>all user list</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Tables</a></li>
-        <li class="active">Data tables</li>
+        <li><a href="#">Users</a></li>
+        <li class="active">All Users</li>
     </ol>
 </section>
 
@@ -222,7 +222,7 @@
 
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Data Table With Full Features</h3>
+                    <h3 class="box-title">User list</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -236,9 +236,8 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            
-                            
+                        <tbody>                            
+                            <!-- user list -->
                         </tbody>                        
                     </table>
                 </div>

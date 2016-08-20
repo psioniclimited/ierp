@@ -4,6 +4,8 @@
 return  [
     'modules' => [
        'User',
-       'Dashboard'
+       'Dashboard',
+       'Company',
+       'Accounts'
     ]
 ];

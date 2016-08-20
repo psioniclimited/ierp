@@ -202,7 +202,7 @@
                     </form>
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
-                    @yield('side_menu')
+                    @include('sidemenu')
                 </section>
                 <!-- /.sidebar -->
             </aside>

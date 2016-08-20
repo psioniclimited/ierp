@@ -47,10 +47,19 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li><a href="roles"><i class="fa fa-circle-o"></i> Roles</a></li>
-            <li><a href="permissions"><i class="fa fa-circle-o"></i> Permission</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i> User-Role</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i> Role-Permission</a></li>
+            <li>
+                <a href="#"><i class="fa fa-circle-o"></i> Permissions
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="roles"><i class="fa fa-circle-o"></i> Roles</a></li>
+                    <li><a href="permissions"><i class="fa fa-circle-o"></i> Permission</a></li>
+                    <li><a href=""><i class="fa fa-circle-o"></i> User-Role</a></li>
+                    <li><a href=""><i class="fa fa-circle-o"></i> Role-Permission</a></li>
+                </ul>
+            </li>
         </ul>
     </li>
     <li class="treeview">

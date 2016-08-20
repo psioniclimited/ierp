@@ -31,6 +31,11 @@ Route::group(['middleware' => ['web']], function () {
 
     //User Settings
     Route::get('roles', 'App\Modules\User\Controllers\UserSettingsController@allRoles');
+    Route::get('getroles', 'App\Modules\User\Controllers\UserSettingsController@getRoles');
+    Route::post('role_add_process', 'App\Modules\User\Controllers\UserSettingsController@addRolesProcess');
+    
     Route::get('permissions', 'App\Modules\User\Controllers\UserSettingsController@allPermissions');
+    Route::get('getpermissions', 'App\Modules\User\Controllers\UserSettingsController@getPermissions');
+    Route::post('permission_add_process', 'App\Modules\User\Controllers\UserSettingsController@addPermissionsProcess');
 });
 
