@@ -15,7 +15,11 @@ Route::group(['middleware' => ['web']], function () {
     });
     
     Route::get('companyinfo', 'App\Modules\Company\Controllers\CompanyController@getCompany');
-    Route::get('branches', 'App\Modules\Company\Controllers\CompanyController@getBranches');
+    Route::get('companydata', 'App\Modules\Company\Controllers\CompanyController@companyData');
+    Route::post('create_company_process', 'App\Modules\Company\Controllers\CompanyController@createCompanyProcess');
     
+    Route::get('branches', 'App\Modules\Company\Controllers\CompanyController@getBranches');
+    Route::get('brancheslist', 'App\Modules\Company\Controllers\CompanyController@branchesData');
+    Route::post('create_branch_process', 'App\Modules\Company\Controllers\CompanyController@createBranchProcess');    
 });
 

@@ -10,7 +10,5 @@
   |
  */
 Route::group(['middleware' => ['web']], function () {
-    Route::get('testbla', function () {
-        return view('Accounts::company');
-    });
+   
 });

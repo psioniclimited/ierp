@@ -69,7 +69,7 @@
 <script>
     $(document).ready(function () {
         $('#company_info_list').DataTable({
-            "paging": false,
+            "paging": true,
             "lengthChange": false,
             "searching": false,
             "ordering": true,
@@ -77,12 +77,12 @@
             "autoWidth": false,
             "processing": true,
             "serverSide": true,
-            "ajax": "{{URL::to('/getroles')}}",
+            "ajax": "{{URL::to('/companydata')}}",
             "columns": [
                 {"data": "id"},
-                {"data": "name"},
-                {"data": "display_name"},
-                {"data": "description"},
+                {"data": "name_of_company"},
+                {"data": "address"},
+                {"data": "contact_number"},
                 {"data": "Link", name: 'link', orderable: false, searchable: false}
             ],
             "order": [[1, 'asc']]
@@ -93,7 +93,7 @@
 @endsection
 
 @section('side_menu')
-<ul></ul>
+
 @endsection
 
 @section('content')
@@ -120,34 +120,41 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form starts here -->
-                <form class="form-horizontal" id="company_info">
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label for="cname" class="col-sm-3 control-label">Company Name*</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="cname" name="cname" placeholder="Enter company name">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="addrs" class="col-sm-3 control-label">Address*</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="addrs" name="addrs" placeholder="Enter address">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="cnum" class="col-sm-3 control-label">Contact Number*</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="cnum" name="cnum" placeholder="Enter contact number">
-                            </div>
+                <div class="alert alert-danger alert-login col-sm-4">
+                    <ul class="list-unstyled">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                {!! Form::open(array('url' => 'create_company_process', 'class' => 'form-horizontal', 'id' => 'company_info')) !!}
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="cname" class="col-sm-3 control-label">Company Name*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="cname" name="cname" placeholder="Enter company name">
                         </div>
                     </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-default">Cancel</button>
-                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    <div class="form-group">
+                        <label for="addrs" class="col-sm-3 control-label">Address*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="addrs" name="addrs" placeholder="Enter address">
+                        </div>
                     </div>
-                    <!-- /.box-footer -->
-                </form>
+                    <div class="form-group">
+                        <label for="cnum" class="col-sm-3 control-label">Contact Number*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="cnum" name="cnum" placeholder="Enter contact number">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                </div>
+                <!-- /.box-footer -->
+                {!! Form::close() !!}
                 <!-- /.form ends here -->
             </div>
             <!-- /.box -->
@@ -163,53 +170,17 @@
                     <table id="company_info_list" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Rendering engine</th>
-                                <th>Browser</th>
-                                <th>Platform(s)</th>
-                                <th>Engine version</th>
-                                <th>CSS grade</th>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Misc</td>
-                                <td>PSP browser</td>
-                                <td>PSP</td>
-                                <td>-</td>
-                                <td>C</td>
-                            </tr>
-                            <tr>
-                                <td>Misc</td>
-                                <td>PSP browser</td>
-                                <td>PSP</td>
-                                <td>-</td>
-                                <td>C</td>
-                            </tr>
-                            <tr>
-                                <td>Misc</td>
-                                <td>PSP browser</td>
-                                <td>PSP</td>
-                                <td>-</td>
-                                <td>C</td>
-                            </tr>
 
-                            <tr>
-                                <td>Other browsers</td>
-                                <td>All others</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>U</td>
-                            </tr>
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Rendering engine</th>
-                                <th>Browser</th>
-                                <th>Platform(s)</th>
-                                <th>Engine version</th>
-                                <th>CSS grade</th>
-                            </tr>
-                        </tfoot>
+
                     </table>
                 </div>
                 <!-- /.box-body -->
