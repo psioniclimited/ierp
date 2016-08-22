@@ -2,26 +2,25 @@
 
 @section('css')
 <!-- DataTables -->
-<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet" href="plugins/tooltipster/tooltipster.css">
+<link rel="stylesheet" href="{{asset('plugins/datatables/dataTables.bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('plugins/tooltipster/tooltipster.css')}}">
 @endsection
 
 @section('scripts')
 <!-- DataTables -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
-
-<script src="plugins/validation/dist/jquery.validate.min.js"></script>
-<script src="plugins/tooltipster/tooltipster.js"></script>
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{asset('plugins/validation/dist/jquery.validate.min.js')}}"></script>
+<script src="{{asset('plugins/tooltipster/tooltipster.js')}}"></script>
 
 <!-- Page Script -->
 <script>
 // add the rule here
-    $.validator.addMethod("valueNotEquals", function (value, element, arg) {
-        return arg != value;
-    }, "Value must not equal arg.");
+$.validator.addMethod("valueNotEquals", function (value, element, arg) {
+    return arg != value;
+}, "Value must not equal arg.");
 
-    $(document).ready(function () {
+$(document).ready(function () {
         // initialize tooltipster on text input elements
         $('form input,select').tooltipster({
             trigger: 'custom',
@@ -34,7 +33,7 @@
             errorPlacement: function (error, element) {
 
                 var lastError = $(element).data('lastError'),
-                        newError = $(error).text();
+                newError = $(error).text();
 
                 $(element).data('lastError', newError);
 
@@ -97,13 +96,13 @@
             "serverSide": true,
             "ajax": "{{URL::to('/brancheslist')}}",
             "columns": [
-                {"data": "id"},
-                {"data": "branch_name"},
-                {"data": "branch_address"},
-                {"data": "contact_number"},
-                {"data": "branch_type_id"},
-                {"data": "companie_information_id"},
-                {"data": "Link", name: 'link', orderable: false, searchable: false}
+            {"data": "id"},
+            {"data": "branch_name"},
+            {"data": "branch_address"},
+            {"data": "contact_number"},
+            {"data": "branch_type_id"},
+            {"data": "companie_information_id"},
+            {"data": "Link", name: 'link', orderable: false, searchable: false}
             ],
             "order": [[1, 'asc']]
         });
@@ -148,6 +147,66 @@
                     </ul>
                 </div>
                 @endif
+
+                @if(isset($getBranchInfo))
+
+                @foreach($getBranchInfo as $b_info)
+
+                <!-- form starts here -->                
+                {!! Form::open(array('url' => 'update_branch_process', 'class' => 'form-horizontal', 'id' => 'company_branch')) !!}    
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="bname" class="col-sm-3 control-label">Branch Name*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="bname" name="bname" placeholder="Enter branch name" value="{{$b_info['branch_name']}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="baddrs" class="col-sm-3 control-label">Branch Address*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="baddrs" name="baddrs" placeholder="Enter branch address" value="{{$b_info['branch_address']}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cnum" class="col-sm-3 control-label">Contact Number*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="cnum" name="cnum" placeholder="Enter contact number" value="{{$b_info['contact_number']}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="btypeid" class="col-sm-3 control-label">Branch Type*</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="btypeid">
+                                <option value="default">Choose...</option>
+                                @foreach($branchType as $bType)
+                                <option value="{{ $bType->id }}">{{ $bType->description }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cinfoid" class="col-sm-3 control-label">Company Information*</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="cinfoid">
+                                <option value="default">Choose...</option>
+                                @foreach($companyInfo as $cInfo)
+                                <option value="{{ $cInfo->id}}">{{ $cInfo->name_of_company}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                </div>
+                <!-- /.box-footer -->
+                {!! Form::close() !!}
+                <!-- /.form ends here -->
+                @endforeach
+
+                @else
                 <!-- form starts here -->                
                 {!! Form::open(array('url' => 'create_branch_process', 'class' => 'form-horizontal', 'id' => 'company_branch')) !!}    
                 <div class="box-body">
@@ -200,6 +259,7 @@
                 <!-- /.box-footer -->
                 {!! Form::close() !!}
                 <!-- /.form ends here -->
+                @endif
             </div>
             <!-- /.box -->
         </div>
@@ -224,7 +284,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                         </tbody>
                         
                     </table>

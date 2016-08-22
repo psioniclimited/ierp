@@ -2,13 +2,13 @@
 
 @section('css')
 <!-- DataTables -->
-<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+<link rel="stylesheet" href="{{asset('plugins/datatables/dataTables.bootstrap.css')}}">
 @endsection
 
 @section('scripts')
 <!-- DataTables -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
 
 <script>
     $(document).ready(function () {        

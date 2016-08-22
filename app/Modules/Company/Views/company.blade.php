@@ -2,17 +2,16 @@
 
 @section('css')
 <!-- DataTables -->
-<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet" href="plugins/tooltipster/tooltipster.css">
+<link rel="stylesheet" href="{{asset('plugins/datatables/dataTables.bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('plugins/tooltipster/tooltipster.css')}}">
 @endsection
 
 @section('scripts')
 <!-- DataTables -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
-
-<script src="plugins/validation/dist/jquery.validate.min.js"></script>
-<script src="plugins/tooltipster/tooltipster.js"></script>
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{asset('plugins/validation/dist/jquery.validate.min.js')}}"></script>
+<script src="{{asset('plugins/tooltipster/tooltipster.js')}}"></script>
 
 <script>
     $(document).ready(function () {
@@ -28,7 +27,7 @@
             errorPlacement: function (error, element) {
 
                 var lastError = $(element).data('lastError'),
-                        newError = $(error).text();
+                newError = $(error).text();
 
                 $(element).data('lastError', newError);
 
@@ -79,11 +78,11 @@
             "serverSide": true,
             "ajax": "{{URL::to('/companydata')}}",
             "columns": [
-                {"data": "id"},
-                {"data": "name_of_company"},
-                {"data": "address"},
-                {"data": "contact_number"},
-                {"data": "Link", name: 'link', orderable: false, searchable: false}
+            {"data": "id"},
+            {"data": "name_of_company"},
+            {"data": "address"},
+            {"data": "contact_number"},
+            {"data": "Link", name: 'link', orderable: false, searchable: false}
             ],
             "order": [[1, 'asc']]
         });
@@ -119,14 +118,45 @@
                     <h3 class="box-title">Company Information Page</h3>
                 </div>
                 <!-- /.box-header -->
-                <!-- form starts here -->
-                <div class="alert alert-danger alert-login col-sm-4">
-                    <ul class="list-unstyled">
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                @if(isset($getCompanyInfo))
+
+                @foreach($getCompanyInfo as $c_info)
+                
+                <!-- form starts here --> 
+                {!! Form::open(array('url' => 'update_company_process', 'class' => 'form-horizontal', 'id' => 'company_info')) !!}
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="cname" class="col-sm-3 control-label">Company Name*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="cname" name="cname" placeholder="Enter company name" value="{{$c_info['name_of_company']}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addrs" class="col-sm-3 control-label">Address*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="addrs" name="addrs" placeholder="Enter address" value="{{$c_info['address']}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cnum" class="col-sm-3 control-label">Contact Number*</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="cnum" name="cnum" placeholder="Enter contact number" value="{{$c_info['contact_number']}}">
+                        </div>
+                    </div>
                 </div>
+                <input type="hidden" name="companyID" value="{{$c_info['id']}}">
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                </div>
+                <!-- /.box-footer -->
+                {!! Form::close() !!}
+                <!-- /.form ends here -->
+                @endforeach
+
+                @else
+                <!-- form starts here -->                
                 {!! Form::open(array('url' => 'create_company_process', 'class' => 'form-horizontal', 'id' => 'company_info')) !!}
                 <div class="box-body">
                     <div class="form-group">
@@ -156,6 +186,7 @@
                 <!-- /.box-footer -->
                 {!! Form::close() !!}
                 <!-- /.form ends here -->
+                @endif
             </div>
             <!-- /.box -->
         </div>

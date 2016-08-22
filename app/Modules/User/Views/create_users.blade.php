@@ -1,12 +1,12 @@
 @extends('master')
 
 @section('css')
-<link rel="stylesheet" href="plugins/tooltipster/tooltipster.css">
+<link rel="stylesheet" href="{{asset('plugins/tooltipster/tooltipster.css')}}">
 @endsection
 
 @section('scripts')
-<script src="plugins/validation/dist/jquery.validate.js"></script>
-<script src="plugins/tooltipster/tooltipster.js"></script>
+<script src="{{asset('plugins/validation/dist/jquery.validate.js')}}"></script>
+<script src="{{asset('plugins/tooltipster/tooltipster.js')}}"></script>
 <script>
     $(document).ready(function () {
 

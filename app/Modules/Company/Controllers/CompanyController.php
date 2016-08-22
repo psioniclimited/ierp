@@ -17,12 +17,12 @@ class CompanyController extends Controller {
     public function companyData() {
         $allCompanies = Company::all();
         return Datatables::of($allCompanies)
-                        ->addColumn('Link', function ($allCompanies) {
-                            return '<a href="' . url('/sales') . '/' . $allCompanies->id . '/edit' . '"' . 'class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
-                        })
-                        ->editColumn('id', '{{$id}}')
-                        ->setRowId('id')
-                        ->make(true);
+        ->addColumn('Link', function ($allCompanies) {
+            return '<a href="' . url('/company_edit') . '/' . $allCompanies->id . '"' . 'class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+        })
+        ->editColumn('id', '{{$id}}')
+        ->setRowId('id')
+        ->make(true);
     }
 
     public function createCompanyProcess(\App\Http\Requests\CompanyRequest $request) {
@@ -37,6 +37,32 @@ class CompanyController extends Controller {
         return redirect('companyinfo');
     }
 
+    public function editCompanyInfo($id){
+
+        $getCompanyInfo = Company::where('id',$id)->get();
+
+        return view('Company::company')->with('getCompanyInfo', $getCompanyInfo);
+
+        //return $getCompanyInfo;
+    }
+
+    public function updateCompanyInfo(\App\Http\Requests\CompanyRequest $request){
+
+        $companyID = $request->input('companyID');
+
+        $getCompanyInfo = Company::find($companyID);
+
+        $getCompanyInfo->name_of_company = $request->input('cname');
+        $getCompanyInfo->address = $request->input('addrs');
+        $getCompanyInfo->contact_number = $request->input('cnum');
+
+        $getCompanyInfo->save();
+
+        return redirect('companyinfo');
+
+    }
+
+    // Branch
     public function getBranches() {
         $companyInfo = Company::select('id', 'name_of_company')->get();
         $branchType = BranchType::select('id', 'description')->get();
@@ -59,12 +85,24 @@ class CompanyController extends Controller {
     public function branchesData() {
         $allBranches = BranchInformation::all();
         return Datatables::of($allBranches)
-                        ->addColumn('Link', function ($allBranches) {
-                            return '<a href="' . url('/sales') . '/' . $allBranches->id . '/edit' . '"' . 'class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
-                        })
-                        ->editColumn('id', '{{$id}}')
-                        ->setRowId('id')
-                        ->make(true);
+        ->addColumn('Link', function ($allBranches) {
+            return '<a href="' . url('/branch_edit') . '/' . $allBranches->id . '"' . 'class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+        })
+        ->editColumn('id', '{{$id}}')
+        ->setRowId('id')
+        ->make(true);
     }
+
+    public function editBranchInfo($id){
+        $companyInfo = Company::select('id', 'name_of_company')->get();
+        $branchType = BranchType::select('id', 'description')->get();
+        $getBranchInfo = BranchInformation::where('id',$id)->get();
+
+        return view('Company::branches')->with('getBranchInfo', $getBranchInfo)->with('companyInfo', $companyInfo)->with('branchType', $branchType);
+
+        // return $getBranchInfo;
+    }
+
+
 
 }
