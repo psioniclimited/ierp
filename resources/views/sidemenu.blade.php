@@ -65,7 +65,7 @@
         </a>
         <ul class="treeview-menu">
             <li><a href=""><i class="fa fa-circle-o"></i> Product List</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i> New Product</a></li>
+            <li><a href="create_product"><i class="fa fa-circle-o"></i> New Product</a></li>
             <li><a href=""><i class="fa fa-circle-o"></i> Product Group</a></li>
             <li><a href=""><i class="fa fa-circle-o"></i> Product Sub-Group</a></li>            
         </ul>

@@ -6,6 +6,7 @@ return  [
        'User',
        'Dashboard',
        'Company',
-       'Accounts'
+       'Accounts',
+       'Product'
     ]
 ];
